@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>Oauth-1.0a by ddo</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Oauth-1.0a</h1>
+        <h2>OAuth 1.0a Request Authorization for Node and Browser</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/ddo/oauth-1.0a/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/ddo/oauth-1.0a/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/ddo/oauth-1.0a" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a name="oauth-10a" class="anchor" href="#oauth-10a"><span class="octicon octicon-link"></span></a>oauth-1.0a</h1>
+
+<p><a href="https://travis-ci.org/ddo/oauth-1.0a"><img src="https://api.travis-ci.org/ddo/oauth-1.0a.png" alt="Dependencies"></a>
+<a href="https://david-dm.org/ddo/oauth-1.0a"><img src="https://david-dm.org/ddo/oauth-1.0a.png?theme=shields.io" alt="Dependency Status"></a>
+<a href="http://badge.fury.io/js/oauth-1.0a"><img src="https://badge.fury.io/js/oauth-1.0a.png" alt="NPM version"></a></p>
+
+<p>OAuth 1.0a Request Authorization for <strong>Node</strong> and <strong>Browser</strong></p>
+
+<p>Send OAuth request with your favorite HTTP client (<a href="https://github.com/mikeal/request">request</a>, <a href="http://api.jquery.com/jQuery.ajax/">jQuery.ajax</a>...)</p>
+
+<p>No more headache about OAuth 1.0a's stuff or "oauth_consumer_key, oauth_nonce, oauth_signature...." parameters, just use your familiar HTTP client to send OAuth requests.</p>
+
+<p>Tested on some popular OAuth 1.0a services:</p>
+
+<ul>
+<li>Twitter</li>
+<li>Flickr</li>
+<li>Bitbucket</li>
+<li>Linkedin</li>
+</ul><h2>
+<a name="quick-start" class="anchor" href="#quick-start"><span class="octicon octicon-link"></span></a>Quick Start</h2>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">oauth</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OAuth</span><span class="p">({</span>
+    <span class="nx">consumer</span><span class="o">:</span> <span class="p">{</span>
+        <span class="kr">public</span><span class="o">:</span> <span class="s1">'&lt;your consumer key&gt;'</span><span class="p">,</span>
+        <span class="nx">secret</span><span class="o">:</span> <span class="s1">'&lt;your consumer secret&gt;'</span>
+    <span class="p">},</span>
+    <span class="nx">signature_method</span><span class="o">:</span> <span class="s1">'&lt;signature method&gt;'</span> <span class="c1">//HMAC-SHA1 or PLAINTEXT ...</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Get OAuth request data then you can use with your http client easily :)</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">oauth</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">token</span><span class="p">);</span>
+</pre></div>
+
+<p>Or if you want to get as a header key-value data</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">oauth</span><span class="p">.</span><span class="nx">toHeader</span><span class="p">(</span><span class="nx">oauth_data</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<h3>
+<a name="nodejs" class="anchor" href="#nodejs"><span class="octicon octicon-link"></span></a>Node.js</h3>
+
+<pre><code>$ npm install oauth-1.0a
+</code></pre>
+
+<h3>
+<a name="browser" class="anchor" href="#browser"><span class="octicon octicon-link"></span></a>Browser</h3>
+
+<p>Download oauth-1.0a.js <a href="https://github.com/ddo/oauth-1.0a/blob/v0.0.6/lib/oauth-1.0a.js">here</a></p>
+
+<pre><code>&lt;script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha1.js"&gt;&lt;/script&gt;
+&lt;script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"&gt;&lt;/script&gt;
+&lt;script src="oauth-1.0a.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<h2>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<h3>
+<a name="work-with-request-nodejs" class="anchor" href="#work-with-request-nodejs"><span class="octicon octicon-link"></span></a>Work with <a href="https://github.com/mikeal/request">request</a> (Node.js)</h3>
+
+<p>Depencies</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'request'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">OAuth</span>   <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'oauth-1.0a'</span><span class="p">);</span>
+</pre></div>
+
+<p>Init</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">oauth</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OAuth</span><span class="p">({</span>
+    <span class="nx">consumer</span><span class="o">:</span> <span class="p">{</span>
+        <span class="kr">public</span><span class="o">:</span> <span class="s1">'xvz1evFS4wEEPTGEFPHBog'</span><span class="p">,</span>
+        <span class="nx">secret</span><span class="o">:</span> <span class="s1">'kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw'</span>
+    <span class="p">},</span>
+    <span class="nx">signature_method</span><span class="o">:</span> <span class="s1">'HMAC-SHA1'</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Your request data</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">request_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">'https://api.twitter.com/1/statuses/update.json?include_entities=true'</span><span class="p">,</span>
+    <span class="nx">method</span><span class="o">:</span> <span class="s1">'POST'</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">status</span><span class="o">:</span> <span class="s1">'Hello Ladies + Gentlemen, a signed OAuth request!'</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>Your token (optional for some requests)</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">token</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="kr">public</span><span class="o">:</span> <span class="s1">'370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb'</span><span class="p">,</span>
+    <span class="nx">secret</span><span class="o">:</span> <span class="s1">'LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE'</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>Call a request</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">request</span><span class="p">({</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="nx">request_data</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span>
+    <span class="nx">method</span><span class="o">:</span> <span class="nx">request_data</span><span class="p">.</span><span class="nx">method</span><span class="p">,</span>
+    <span class="nx">form</span><span class="o">:</span> <span class="nx">oauth</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="nx">request_data</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span>
+<span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//process your data here</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Or if you want to send OAuth data in request's header</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">request</span><span class="p">({</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="nx">request_data</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span>
+    <span class="nx">method</span><span class="o">:</span> <span class="nx">request_data</span><span class="p">.</span><span class="nx">method</span><span class="p">,</span>
+    <span class="nx">form</span><span class="o">:</span> <span class="nx">request_data</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
+    <span class="nx">headers</span><span class="o">:</span> <span class="nx">oauth</span><span class="p">.</span><span class="nx">toHeader</span><span class="p">(</span><span class="nx">oauth</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="nx">request_data</span><span class="p">,</span> <span class="nx">token</span><span class="p">))</span>
+<span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//process your data here</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="work-with-jqueryajax-browser" class="anchor" href="#work-with-jqueryajax-browser"><span class="octicon octicon-link"></span></a>Work with <a href="http://api.jquery.com/jQuery.ajax/">jQuery.ajax</a> (Browser)</h3>
+
+<p><strong>Caution:</strong> please make sure you understand what happen when use OAuth protocol at client side <a href="#client-side-usage-caution">here</a></p>
+
+<p>Init</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">oauth</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OAuth</span><span class="p">({</span>
+    <span class="nx">consumer</span><span class="o">:</span> <span class="p">{</span>
+        <span class="kr">public</span><span class="o">:</span> <span class="s1">'xvz1evFS4wEEPTGEFPHBog'</span><span class="p">,</span>
+        <span class="nx">secret</span><span class="o">:</span> <span class="s1">'kAcSOqF21Fu85e7zjz7ZN2U4ZRhfV3WpwPAoE3Z7kBw'</span>
+    <span class="p">},</span>
+    <span class="nx">signature_method</span><span class="o">:</span> <span class="s1">'HMAC-SHA1'</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Your request data</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">request_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">'https://api.twitter.com/1/statuses/update.json?include_entities=true'</span><span class="p">,</span>
+    <span class="nx">method</span><span class="o">:</span> <span class="s1">'POST'</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">status</span><span class="o">:</span> <span class="s1">'Hello Ladies + Gentlemen, a signed OAuth request!'</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>Your token (optional for some requests)</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">token</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="kr">public</span><span class="o">:</span> <span class="s1">'370773112-GmHxMAgYyLbNEtIKZeRNFsMKPR9EyMZeS9weJAEb'</span><span class="p">,</span>
+    <span class="nx">secret</span><span class="o">:</span> <span class="s1">'LswwdoUaIvS8ltyTt5jkRh4J50vUPVVHtR2YPi5kE'</span>
+<span class="p">};</span>
+</pre></div>
+
+<p>Call a request</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="nx">request_data</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="nx">request_data</span><span class="p">.</span><span class="nx">method</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">oauth</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="nx">request_data</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span>
+<span class="p">}).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//process your data here</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Or if you want to send OAuth data in request's header</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="nx">request_data</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="nx">request_data</span><span class="p">.</span><span class="nx">method</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="nx">request_data</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
+    <span class="nx">headers</span><span class="o">:</span> <span class="nx">oauth</span><span class="p">.</span><span class="nx">toHeader</span><span class="p">(</span><span class="nx">oauth</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="nx">request_data</span><span class="p">,</span> <span class="nx">token</span><span class="p">))</span>
+<span class="p">}).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//process your data here</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="notes" class="anchor" href="#notes"><span class="octicon octicon-link"></span></a>Notes</h2>
+
+<ul>
+<li><p>Some OAuth requests without token use <code>.authorize(request_data)</code> instead of <code>.authorize(request_data, {})</code></p></li>
+<li>
+<p><strong>If you want an easier way to handle your OAuth request. Please visit <a href="https://github.com/ddo/simple-oauth">Simple OAuth</a>, it's a wrapper of this project, some features:</strong></p>
+
+<ul>
+<li>Request Token method</li>
+<li>Get Authorize link method</li>
+<li>Access Token method</li>
+<li>OAuth 2.0 support</li>
+<li>Simpler syntax:</li>
+</ul>
+</li>
+</ul><p>Node.js:</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">request</span><span class="p">(</span><span class="nx">oauth</span><span class="p">.</span><span class="nx">requestsToken</span><span class="p">(),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//process your data here</span>
+<span class="p">});</span>
+</pre></div>
+
+<div class="highlight highlight-js"><pre><span class="nx">request</span><span class="p">(</span><span class="nx">oauth</span><span class="p">.</span><span class="nx">accessToken</span><span class="p">({</span>
+    <span class="nx">oauth_verifier</span><span class="o">:</span> <span class="s1">'&lt;verifier&gt;'</span>
+<span class="p">}),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//process your data here</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>jQuery:</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">oauth</span><span class="p">.</span><span class="nx">requestsToken</span><span class="p">()).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//process your data here</span>
+<span class="p">});</span>
+</pre></div>
+
+<div class="highlight highlight-js"><pre><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="nx">oauth</span><span class="p">.</span><span class="nx">accessToken</span><span class="p">({</span>
+    <span class="nx">oauth_verifier</span><span class="o">:</span> <span class="s1">'&lt;verifier&gt;'</span>
+<span class="p">})).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//process your data here</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="client-side-usage-caution" class="anchor" href="#client-side-usage-caution"><span class="octicon octicon-link"></span></a>Client Side Usage Caution</h2>
+
+<p>OAuth is based around allowing tools and websites to talk to each other.
+However, JavaScript running in web browsers is hampered by security restrictions that prevent code running on one website from accessing data stored or served on another.</p>
+
+<p>Before you start hacking, make sure you understand the limitations posed by cross-domain XMLHttpRequest.</p>
+
+<p>On the bright side, some platforms use JavaScript as their language, but enable the programmer to access other web sites. Examples include:</p>
+
+<ul>
+<li><strong>Google/Firefox/Safari extensions</strong></li>
+<li><strong>Google Gadgets</strong></li>
+<li>
+<strong>Microsoft Sidebar</strong>...</li>
+</ul><p>For those platforms, this library should come in handy.</p>
+
+<h2>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>Todo</h2>
+
+<ul>
+<li>RSA-SHA1 signature method</li>
+</ul><h2>
+<a name="changelog" class="anchor" href="#changelog"><span class="octicon octicon-link"></span></a><a href="https://github.com/ddo/oauth-1.0a/releases">Changelog</a>
+</h2>
+
+<h2>
+<a name="depencies" class="anchor" href="#depencies"><span class="octicon octicon-link"></span></a>Depencies</h2>
+
+<ul>
+<li>Browser: <a href="https://code.google.com/p/crypto-js/">crypto-js</a>
+</li>
+<li>Node: <a href="https://github.com/evanvosberg/crypto-js">crypto-js</a>
+</li>
+</ul><p><a href="https://bitdeli.com/free" title="Bitdeli Badge"><img src="https://d2weczhvl823v0.cloudfront.net/ddo/oauth-1.0a/trend.png" alt="Bitdeli Badge"></a></p>
+      </section>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-24951846-11");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
